@@ -1,0 +1,28 @@
+{
+  "source_project_bytes": 349958892,
+  "optimized_project_bytes": 67628680,
+  "image_bytes_before": 219229723,
+  "image_bytes_after_including_thumbnails": 66946294,
+  "image_reduction_percent_including_new_thumbnails": 69.46,
+  "optimized_images": 229,
+  "generated_lightbox_thumbnails": 188,
+  "html_image_elements_updated": 321,
+  "converted_png_posters": {
+    "images/American_Girl_Doll_Ballet.PNG": "images/American_Girl_Doll_Ballet.webp",
+    "images/America_250_celebration.png": "images/America_250_celebration.webp",
+    "images/GeorgeMCohan.png": "images/GeorgeMCohan.webp",
+    "images/SummerClasses.png": "images/SummerClasses.webp",
+    "images/WestSideStory.png": "images/WestSideStory.webp"
+  },
+  "missing_active_image_references": [],
+  "errors": [],
+  "notes": [
+    "Full photos max 2000px and recompressed",
+    "Lightbox cards use 720px WebP thumbnails",
+    "Full optimized image loads only when clicked",
+    "Below-fold images lazy load",
+    "First content image prioritized",
+    "Width and height added",
+    "Git metadata excluded"
+  ]
+}

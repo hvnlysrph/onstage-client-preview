@@ -9,6 +9,18 @@
         return trigger.matches('img') ? trigger : trigger.querySelector('img');
     }
 
+    function getImageSource(image) {
+        if (!image) return '';
+
+        const source = image.dataset.fullSrc || image.currentSrc || image.src;
+
+        try {
+            return new URL(source, document.baseURI).href;
+        } catch (error) {
+            return source;
+        }
+    }
+
     function getGroupTriggers(trigger) {
         const group = trigger.dataset.lightboxGroup;
         const allTriggers = Array.from(document.querySelectorAll('[data-lightbox]'));
@@ -23,7 +35,7 @@
                 const image = getTriggerImage(item);
                 if (!image) return null;
                 return {
-                    src: image.currentSrc || image.src,
+                    src: getImageSource(image),
                     alt: image.alt || 'Popup preview'
                 };
             })
@@ -49,7 +61,7 @@
         if (!modal || !clickedImage) return;
 
         currentImages = buildImageList(trigger);
-        const clickedSource = clickedImage.currentSrc || clickedImage.src;
+        const clickedSource = getImageSource(clickedImage);
         currentIndex = currentImages.findIndex((item) => item.src === clickedSource);
 
         if (currentIndex < 0) {
