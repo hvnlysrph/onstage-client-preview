@@ -141,3 +141,303 @@
         }
     });
 })();
+
+/* =========================================================
+   COSTUME COLLECTION SLIDESHOW
+   ========================================================= */
+
+const costumeCollections = {
+    oliver: {
+        title: "Oliver Costume Collection",
+
+        images: [
+            {
+                src: "images/OLIVER_PICTURES_2024/PXL_20230518_224648376.jpg",
+                alt: "Oliver costume collection"
+            },
+            {
+                src: "images/OLIVER_PICTURES_2024/PXL_20230518_231845061.jpg",
+                alt: "Oliver costume collection"
+            },
+            {
+                src: "images/OLIVER_PICTURES_2024/PXL_20230518_224835940.jpg",
+                alt: "Oliver costume collection"
+            },
+            {
+                src: "images/OLIVER_PICTURES_2024/PXL_20230518_221001130.jpg",
+                alt: "Oliver costume collection"
+            },
+            {
+                src: "images/OLIVER_PICTURES_2024/350135086_1276239403320229_6535926009654029367_n.jpg",
+                alt: "Oliver costume collection"
+            },
+            {
+                src: "images/OLIVER_PICTURES_2024/350276177_158665467179224_5782369682716649734_n copy.jpg",
+                alt: "Oliver costume collection"
+            }
+        ]
+    },
+
+    "peter-pan": {
+        title: "Peter Pan Costume Collection",
+
+        images: [
+            {
+                src: "images/PETER_PAN_25/660A6536.JPG",
+                alt: "Peter Pan costume collection"
+            },
+            {
+                src: "images/PETER_PAN_25/660A6870.JPG",
+                alt: "Peter Pan costume collection"
+            }
+        ]
+    },
+
+    "christmas-carol": {
+        title: "A Christmas Carol Costume Collection",
+
+        images: [
+            {
+                src: "images/A_Chistmas_Carol_Pictures/660A0001.JPG",
+                alt: "A Christmas Carol costume collection"
+            },
+            {
+                src: "images/A_Chistmas_Carol_Pictures/660A0010.JPG",
+                alt: "A Christmas Carol costume collection"
+            },
+            {
+                src: "images/A_Chistmas_Carol_Pictures/660A0091.JPG",
+                alt: "A Christmas Carol costume collection"
+            },
+            {
+                src: "images/A_Chistmas_Carol_Pictures/660A0123.JPG",
+                alt: "A Christmas Carol costume collection"
+            },
+            {
+                src: "images/A_Chistmas_Carol_Pictures/660A0277.JPG",
+                alt: "A Christmas Carol costume collection"
+            },
+            {
+                src: "images/A_Chistmas_Carol_Pictures/660A9277.JPG",
+                alt: "A Christmas Carol costume collection"
+            },
+            {
+                src: "images/A_Chistmas_Carol_Pictures/660A9530.JPG",
+                alt: "A Christmas Carol costume collection"
+            }
+        ]
+    }
+};
+
+
+const costumeGalleryModal =
+    document.getElementById("costumeGalleryModal");
+
+const costumeGalleryImage =
+    document.getElementById("costumeGalleryImage");
+
+const costumeGalleryTitle =
+    document.getElementById("costumeGalleryTitle");
+
+const costumeGalleryCaption =
+    document.getElementById("costumeGalleryCaption");
+
+const costumeGalleryCounter =
+    document.getElementById("costumeGalleryCounter");
+
+
+let activeCostumeCollection = null;
+let activeCostumeImageIndex = 0;
+
+
+function updateCostumeGallery() {
+    if (!activeCostumeCollection) {
+        return;
+    }
+
+    const collection =
+        costumeCollections[activeCostumeCollection];
+
+    const currentImage =
+        collection.images[activeCostumeImageIndex];
+
+    costumeGalleryTitle.textContent = collection.title;
+    costumeGalleryImage.src = currentImage.src;
+    costumeGalleryImage.alt = currentImage.alt;
+
+    costumeGalleryCaption.textContent = currentImage.alt;
+
+    costumeGalleryCounter.textContent =
+        `${activeCostumeImageIndex + 1} of ${collection.images.length}`;
+}
+
+
+function openCostumeGallery(collectionName) {
+    const collection = costumeCollections[collectionName];
+
+    if (!collection || collection.images.length === 0) {
+        return;
+    }
+
+    activeCostumeCollection = collectionName;
+    activeCostumeImageIndex = 0;
+
+    updateCostumeGallery();
+    costumeGalleryModal.showModal();
+}
+
+
+function closeCostumeGallery() {
+    costumeGalleryModal.close();
+
+    activeCostumeCollection = null;
+    activeCostumeImageIndex = 0;
+
+    costumeGalleryImage.src = "";
+}
+
+
+function navigateCostumeGallery(direction) {
+    if (!activeCostumeCollection) {
+        return;
+    }
+
+    const images =
+        costumeCollections[activeCostumeCollection].images;
+
+    activeCostumeImageIndex =
+        (
+            activeCostumeImageIndex
+            + direction
+            + images.length
+        ) % images.length;
+
+    updateCostumeGallery();
+}
+
+
+document
+    .querySelectorAll(".costume-gallery-trigger")
+    .forEach((trigger) => {
+
+        trigger.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            openCostumeGallery(
+                trigger.dataset.costumeGallery
+            );
+        });
+
+    });
+
+
+document
+    .querySelector("[data-costume-gallery-close]")
+    ?.addEventListener("click", closeCostumeGallery);
+
+
+document
+    .querySelectorAll("[data-costume-gallery-nav]")
+    .forEach((button) => {
+
+        button.addEventListener("click", () => {
+            navigateCostumeGallery(
+                Number(button.dataset.costumeGalleryNav)
+            );
+        });
+
+    });
+
+
+costumeGalleryModal?.addEventListener("click", (event) => {
+    if (event.target === costumeGalleryModal) {
+        closeCostumeGallery();
+    }
+});
+
+
+document.addEventListener("keydown", (event) => {
+    if (!costumeGalleryModal?.open) {
+        return;
+    }
+
+    if (event.key === "ArrowRight") {
+        navigateCostumeGallery(1);
+    }
+
+    if (event.key === "ArrowLeft") {
+        navigateCostumeGallery(-1);
+    }
+
+    if (event.key === "Escape") {
+        closeCostumeGallery();
+    }
+});
+
+const videoGalleryModal =
+    document.getElementById("videoGalleryModal");
+
+const videoGalleryPlayer =
+    document.getElementById("videoGalleryPlayer");
+
+const videoGalleryModalTitle =
+    document.getElementById("videoGalleryModalTitle");
+
+const videoGalleryCloseButton =
+    document.querySelector("[data-video-close]");
+
+function openVideoGallery(videoSource, videoTitle) {
+    if (!videoGalleryModal || !videoGalleryPlayer || !videoSource) {
+        return;
+    }
+
+    videoGalleryModalTitle.textContent =
+        videoTitle || "On Stage Video";
+
+    videoGalleryPlayer.src = videoSource;
+    videoGalleryPlayer.load();
+
+    videoGalleryModal.showModal();
+
+    videoGalleryPlayer.play().catch(() => {
+        // The visitor can use the native play control if autoplay is blocked.
+    });
+}
+
+function closeVideoGallery() {
+    if (!videoGalleryModal || !videoGalleryPlayer) {
+        return;
+    }
+
+    videoGalleryPlayer.pause();
+    videoGalleryPlayer.removeAttribute("src");
+    videoGalleryPlayer.load();
+    videoGalleryModal.close();
+}
+
+document
+    .querySelectorAll(".video-gallery-card")
+    .forEach((videoCard) => {
+        videoCard.addEventListener("click", () => {
+            openVideoGallery(
+                videoCard.dataset.videoSrc,
+                videoCard.dataset.videoTitle
+            );
+        });
+    });
+
+videoGalleryCloseButton?.addEventListener(
+    "click",
+    closeVideoGallery
+);
+
+videoGalleryModal?.addEventListener("click", (event) => {
+    if (event.target === videoGalleryModal) {
+        closeVideoGallery();
+    }
+});
+
+videoGalleryModal?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeVideoGallery();
+});
